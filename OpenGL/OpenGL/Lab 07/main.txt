@@ -1,0 +1,147 @@
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include <cmath>
+#include <math.h>
+#include <stdio.h>
+
+float x_position1 = -180.0;
+float x_position2 = -150.0;
+
+void drawFilledCircle(GLfloat x, GLfloat y, GLfloat radius)
+{
+
+    int i;
+    int triangleAmount =50;
+    GLfloat twicePi = 2.0f*3.1416;
+
+    glBegin(GL_TRIANGLE_FAN);
+        glVertex2f(x,y);
+        for(i=0; i<=triangleAmount; i++){
+            glVertex2f(x+(radius*cos(i*twicePi/triangleAmount)),
+                       y+(radius*sin(i*twicePi/triangleAmount)));
+    }
+
+    glEnd();
+}
+
+void display()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glLoadIdentity();
+    glTranslatef( x_position1, 0.0, 0.0);
+
+    glColor3f (1.0,1.0,1.0);        //Cloud_01
+    drawFilledCircle(40, 70, 12);
+    glColor3f (0.8,0.8,0.8);
+    drawFilledCircle(34, 66, 12);
+    glColor3f (1.0,1.0,1.0);
+    drawFilledCircle(35, 65, 12);
+    glColor3f (0.8,0.8,0.8);
+    drawFilledCircle(48, 58, 15);
+    glColor3f (1.0,1.0,1.0);
+    drawFilledCircle(49, 59, 15);
+    glColor3f (0.8,0.8,0.8);
+    drawFilledCircle(65, 65, 15);
+    glColor3f (1.0,1.0,1.0);
+    drawFilledCircle(63, 67, 15);
+    glColor3f (0.8,0.8,0.8);
+    drawFilledCircle(53, 75, 10);
+    glColor3f (1.0,1.0,1.0);
+    drawFilledCircle(53, 74, 10);
+
+    glLoadIdentity();
+    glTranslatef( x_position2, -50.0, 0.0);
+
+    glColor3f (0.8,0.8,0.8);        //Cloud_02
+    drawFilledCircle(-90, 30, 10);
+    glColor3f (1.0,1.0,1.0);
+    drawFilledCircle(-88, 30, 10);
+    glColor3f (0.8,0.8,0.8);
+    drawFilledCircle(-80, 27, 12);
+    glColor3f (1.0,1.0,1.0);
+    drawFilledCircle(-81, 28, 11);
+    glColor3f (1.0,1.0,1.0);
+    drawFilledCircle(-88, 35, 10);
+    glColor3f (0.8,0.8,0.8);
+    drawFilledCircle(-75, 39, 15);
+    glColor3f (0.8,0.8,0.8);
+    drawFilledCircle(-72, 37, 15);
+    glColor3f (1.0,1.0,1.0);
+    drawFilledCircle(-74, 38, 15);
+
+    glutSwapBuffers();
+}
+
+void reshape(int w, int h)
+{
+    glViewport(0, 0, w, h);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    gluOrtho2D(-100, 100, -100, 100);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void initOpenGL()
+{
+    glClearColor(0.1, 0.6, 1.0, 1.0);
+}
+
+void timer1(int)
+{
+    glutPostRedisplay();
+    glutTimerFunc(1000/60, timer1, 0);
+
+    if(x_position1<=130)
+    {
+        x_position1 += 0.40;
+    }
+    else
+    {
+        x_position1 = -180.0;
+        x_position1 += 0.40;
+    }
+}
+
+void timer2(int)
+{
+    glutPostRedisplay();
+    glutTimerFunc(1000/60, timer2, 0);
+
+    if(x_position2<=200)
+    {
+        x_position2 += 0.90;
+    }
+    else
+    {
+        x_position2 = -150.0;
+        x_position2 += 0.90;
+    }
+}
+int main(int argc, char **argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+    glutInitWindowSize(500, 500);
+    glutInitWindowPosition(200, 100);
+    glutCreateWindow("workshop window");
+
+    initOpenGL();
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
+
+    glutTimerFunc(0, timer1, 0);
+    glutTimerFunc(0, timer2, 0);
+    glutMainLoop();
+
+
+    return 0;
+
+
+}

@@ -1,0 +1,93 @@
+#include <windows.h>
+
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
+#include <stdio.h>
+float x_position = -70.0;
+
+//int temp=0;
+void display(void)
+{
+    glClear (GL_COLOR_BUFFER_BIT);
+
+    glLoadIdentity();
+    glTranslatef( x_position, 0.0, 0.0);
+
+    glBegin(GL_POLYGON);
+        glVertex3f (-70, -27, 0.0);
+        glVertex3f (-10, -27, 0.0);
+        glColor3f (0.1, 0.1, 0.1);
+        glVertex3f (-40, 40, 0.0);
+    glEnd();
+
+    glLoadIdentity();
+
+    glBegin(GL_POLYGON);
+        glVertex3f (40, -50, 0.0);
+        glVertex3f (70, 7, 0.0);
+        glColor3f (0.3, 0.2, 0.2);
+        glVertex3f (10, 7, 0.0);
+
+    glEnd();
+
+
+    glutSwapBuffers();
+    //glFlush ();
+}
+void reshape(int w, int h)
+{
+    glViewport(0, 0, w, h);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    gluOrtho2D(-100, 100, -100, 100);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void initOpenGL()
+{
+    glClearColor(1.0, 1.0, 1.0, 0.0);
+}
+
+void timer(int)
+{
+    glutPostRedisplay();
+    glutTimerFunc(1000/60, timer, 0);
+
+        if(x_position = 79)
+        x_position += 0.50;
+
+
+}
+
+/*void init (void)
+{
+
+    glClearColor (1, 1, 1, 0.0);
+
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(100, -100, 100, -100, 1.0, -1.0);
+}*/
+
+
+int main(int argc, char** argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize (500, 500);
+    glutInitWindowPosition (100, 100);
+    glutCreateWindow ("hello");
+    initOpenGL();
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
+    glutTimerFunc(0, timer, 0);
+    glutMainLoop();
+    return 0;   /* ISO C requires main to return int. */
+}
